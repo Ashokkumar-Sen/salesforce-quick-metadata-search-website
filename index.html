@@ -4,65 +4,462 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Salesforce Quick Metadata Search</title>
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary-color: #00a1e0;
+      --primary-hover: #0176d3;
+      --accent-color: #00f2fe;
+      --bg-dark: #060813;
+      --glass-bg: rgba(10, 15, 30, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --font-display: 'Plus Jakarta Sans', sans-serif;
+      --font-body: 'Outfit', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Ambient Floating Glow Orbs */
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      z-index: -1;
+      opacity: 0.15;
+      pointer-events: none;
+      animation: float 12s infinite alternate ease-in-out;
+    }
+
+    .orb-1 {
+      width: 400px;
+      height: 400px;
+      background: var(--primary-color);
+      top: -100px;
+      right: -50px;
+    }
+
+    .orb-2 {
+      width: 500px;
+      height: 500px;
+      background: #7928ca;
+      bottom: -150px;
+      left: -100px;
+      animation-delay: -4s;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px) scale(1); }
+      100% { transform: translateY(40px) scale(1.1); }
+    }
+
+    /* Layout Wrapper */
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 20px;
+      min-height: 100vh;
+    }
+
+    /* Centered Glass Panel Dashboard */
+    .dashboard {
+      width: 100%;
+      max-width: 900px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border: 1px solid var(--glass-border);
+      border-radius: 28px;
+      box-shadow: 
+        0 40px 100px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+    }
+
+    /* Top Branding Header */
+    .header {
+      padding: 40px 48px;
+      text-align: center;
+      border-bottom: 1px solid var(--glass-border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
+    }
+
+    /* Embedded Logo Icon */
+    .logo-container {
+      width: 80px;
+      height: 80px;
+      background: rgba(0, 161, 224, 0.1);
+      border: 1px solid rgba(0, 161, 224, 0.3);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 24px rgba(0, 161, 224, 0.2);
+    }
+
+    .logo-container svg {
+      width: 48px;
+      height: 48px;
+    }
+
+    .app-title {
+      font-family: var(--font-display);
+      font-size: 2.4rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .app-tagline {
+      color: var(--accent-color);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    /* Premium Install CTA Button */
+    .btn-install {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+      color: #fff;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.1rem;
+      text-decoration: none;
+      padding: 16px 40px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 161, 224, 0.3);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+    }
+
+    .btn-install:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 35px rgba(0, 161, 224, 0.45);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .btn-install svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    /* Core Product Showcase Dashboard Section */
+    .showcase {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    @media (max-width: 768px) {
+      .showcase {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left Panel: Feature Highlights Checklist */
+    .features-panel {
+      padding: 48px;
+      border-right: 1px solid var(--glass-border);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .features-panel {
+        border-right: none;
+        border-bottom: 1px solid var(--glass-border);
+      }
+    }
+
+    .panel-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+
+    .feature-item {
+      display: flex;
+      gap: 16px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid rgba(255, 255, 255, 0.02);
+      border-radius: 16px;
+      transition: all 0.25s ease;
+    }
+
+    .feature-item:hover {
+      background: rgba(255, 255, 255, 0.03);
+      border-color: var(--glass-border);
+      transform: translateX(4px);
+    }
+
+    .feature-bullet {
+      width: 8px;
+      height: 8px;
+      background-color: var(--accent-color);
+      border-radius: 50%;
+      margin-top: 8px;
+      flex-shrink: 0;
+      box-shadow: 0 0 10px var(--accent-color);
+    }
+
+    .feature-text h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .feature-text p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.45;
+    }
+
+    /* Right Panel: Interactive UI Mockup */
+    .mockup-panel {
+      padding: 48px;
+      background: rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .mockup-window {
+      width: 100%;
+      background: #090c15;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+    }
+
+    .mockup-header {
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .window-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .window-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .window-dot.red { background: #ff5f56; }
+    .window-dot.yellow { background: #ffbd2e; }
+    .window-dot.green { background: #27c93f; }
+
+    .mockup-tabs {
+      display: flex;
+      gap: 4px;
+      padding: 8px 16px;
+      background: rgba(0, 0, 0, 0.2);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      overflow-x: auto;
+    }
+
+    .mockup-tab {
+      font-size: 0.7rem;
+      padding: 4px 8px;
+      border-radius: 4px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    .mockup-tab.active {
+      background: rgba(0, 161, 224, 0.15);
+      color: var(--accent-color);
+      font-weight: 600;
+    }
+
+    .mockup-body {
+      padding: 16px;
+      min-height: 180px;
+    }
+
+    .search-box-mock {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mock-result {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      padding: 10px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .mock-result:last-child {
+      margin-bottom: 0;
+    }
+
+    .result-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .result-badge {
+      font-size: 0.6rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .badge-flow { background: rgba(155, 89, 182, 0.15); color: #9b59b6; }
+    .badge-apex { background: rgba(33, 150, 243, 0.15); color: #2196f3; }
+    .badge-field { background: rgba(46, 204, 113, 0.15); color: #2ecc71; }
+
+    .result-title {
+      font-size: 0.75rem;
+      font-family: monospace;
+    }
+
+    .result-action {
+      font-size: 0.65rem;
+      color: var(--accent-color);
+      cursor: pointer;
+    }
+
+    /* Footer Section */
+    .footer {
+      padding: 30px 48px;
+      text-align: center;
+      background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.1) 100%);
+    }
+
+    .footer p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+  </style>
 </head>
 <body>
-  <!-- Dynamic Background Glowing Orbs -->
-  <div class="ambient-glow glow-blue"></div>
-  <div class="ambient-glow glow-cyan"></div>
-  
-  <div class="wrapper">
-    <!-- Main Glass Card -->
-    <main class="glass-card">
-      
-      <!-- Top Header / Branding -->
-      <section class="branding">
-        <div class="app-icon-wrapper">
-          <img src="icons/icon-128.png" alt="Salesforce Quick Metadata Search Icon" class="app-icon">
-        </div>
-        <h1 class="title">Quick Metadata Search</h1>
-        <p class="tagline">The Ultimate Salesforce Power Utility</p>
-        
-        <!-- Direct Extension Install Button -->
-        <div class="cta-wrapper">
-          <a href="https://chrome.google.com/webstore" class="install-btn" target="_blank">
-            <svg viewBox="0 0 24 24" class="chrome-icon" fill="currentColor">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.66 0 3-1.34 3-3 0-.22-.03-.44-.07-.65 3.19 1.48 5.47 4.75 5.47 8.65 0 2.22-.76 4.25-2.03 5.89z"/>
-            </svg>
-            Add to Chrome (Direct Install)
-          </a>
-        </div>
-      </section>
+  <!-- Background Glows -->
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-2"></div>
 
-      <!-- App Features Description -->
-      <section class="description-section">
-        <h2>Features Checklist</h2>
-        <div class="features-list">
+  <div class="container">
+    <!-- Main Dashboard Container -->
+    <div class="dashboard">
+      
+      <!-- Top Header -->
+      <header class="header">
+        <!-- Pure Inline SVG Logo -->
+        <div class="logo-container">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M72.9 50.1C72.9 44.5 68.4 40 62.8 40C62 40 61.2 40.1 60.5 40.3C57.4 33.6 50.6 29 42.8 29C32.3 29 23.6 36.9 22.3 47.1C15.6 48.2 10.5 54.1 10.5 61.2C10.5 68.9 16.7 75.1 24.4 75.1H71.1C78.8 75.1 85 68.9 85 61.2C85 55 80 49.8 72.9 50.1Z" fill="url(#cloudGrad)"/>
+            <circle cx="50" cy="55" r="14" fill="#060813" stroke="#00f2fe" stroke-width="3"/>
+            <line x1="59.5" y1="64.5" x2="72" y2="77" stroke="#00f2fe" stroke-width="4" stroke-linecap="round"/>
+            <defs>
+              <linearGradient id="cloudGrad" x1="10.5" y1="29" x2="85" y2="75.1" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#00a1e0"/>
+                <stop offset="1" stop-color="#0176d3"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <h1 class="app-title">Quick Metadata Search</h1>
+        <p class="app-tagline">Salesforce Developer Companion</p>
+        
+        <!-- Direct Chrome Web Store link -->
+        <a href="https://chrome.google.com/webstore" class="btn-install" target="_blank">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.66 0 3-1.34 3-3 0-.22-.03-.44-.07-.65 3.19 1.48 5.47 4.75 5.47 8.65 0 2.22-.76 4.25-2.03 5.89z"/>
+          </svg>
+          Add to Chrome
+        </a>
+      </header>
+
+      <!-- Main Showcase split -->
+      <section class="showcase">
+        
+        <!-- Left: Feature descriptions -->
+        <div class="features-panel">
+          <h2 class="panel-title">Toolbox Checklist</h2>
           
           <div class="feature-item">
             <div class="feature-bullet"></div>
             <div class="feature-text">
-              <h3>Lightning Metadata Search</h3>
-              <p>Type to search across Flows, Apex, Fields, Labels, Validation Rules, and Queues with fast caching.</p>
+              <h3>Lightning-Fast Search</h3>
+              <p>Search across Flows, Apex classes, custom fields, validation rules, groups, and email templates with zero lag.</p>
             </div>
           </div>
 
           <div class="feature-item">
             <div class="feature-bullet"></div>
             <div class="feature-text">
-              <h3>Bulk User Permission Set Allocator</h3>
-              <p>Select multiple active users and permission sets side-by-side to assign or revoke access in bulk.</p>
+              <h3>Bulk Permission Allocations</h3>
+              <p>A side-by-side grid checklist to assign or revoke permission sets for multiple active users concurrently.</p>
             </div>
           </div>
 
           <div class="feature-item">
             <div class="feature-bullet"></div>
             <div class="feature-text">
-              <h3>Anonymous Apex Console</h3>
-              <p>Write and run Apex scripts with syntax highlighting, log level overrides, and automatic JSON beautification.</p>
+              <h3>Apex Anonymous Runner</h3>
+              <p>Write scripts in an editor, execute them live, adjust debugging levels, and beautify complex JSON logs on the fly.</p>
             </div>
           </div>
 
@@ -70,27 +467,58 @@
             <div class="feature-bullet"></div>
             <div class="feature-text">
               <h3>In-Place Apex Code Editor</h3>
-              <p>Deploy code compile requests with live polling, compilation error lines, and split-screen previews.</p>
+              <p>Deploy code compile requests with active compile request tracking, compilation error lines, and split previews.</p>
             </div>
           </div>
-
-          <div class="feature-item">
-            <div class="feature-bullet"></div>
-            <div class="feature-text">
-              <h3>Interactive Permissions & Tests Explorer</h3>
-              <p>Track test suites runs histories and edit profile/permission setup entities on the fly.</p>
-            </div>
-          </div>
-
         </div>
+
+        <!-- Right: Animated UI Mockup window -->
+        <div class="mockup-panel">
+          <div class="mockup-window">
+            <div class="mockup-header">
+              <div class="window-dots">
+                <span class="window-dot red"></span>
+                <span class="window-dot yellow"></span>
+                <span class="window-dot green"></span>
+              </div>
+            </div>
+            <div class="mockup-tabs">
+              <span class="mockup-tab active">All (Search)</span>
+              <span class="mockup-tab">Console</span>
+              <span class="mockup-tab">UserAssignments</span>
+              <span class="mockup-tab">Tests</span>
+            </div>
+            <div class="mockup-body">
+              <div class="search-box-mock">
+                <span>🔍</span>
+                <span>Type to search Salesforce metadata...</span>
+              </div>
+              <div class="mock-result">
+                <div class="result-left">
+                  <span class="result-badge badge-flow">Flow</span>
+                  <span class="result-title">New_Lead_Automation</span>
+                </div>
+                <span class="result-action">View details</span>
+              </div>
+              <div class="mock-result">
+                <div class="result-left">
+                  <span class="result-badge badge-apex">ApexClass</span>
+                  <span class="result-title">AccountSelector</span>
+                </div>
+                <span class="result-action">View details</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </section>
 
-      <!-- Custom Footer -->
+      <!-- Footer -->
       <footer class="footer">
         <p>© 2026 Quick Metadata Search for Salesforce. Built with 💙 for the Salesforce community.</p>
       </footer>
 
-    </main>
+    </div>
   </div>
 </body>
 </html>
