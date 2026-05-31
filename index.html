@@ -3,28 +3,92 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Salesforce Quick Metadata Search — Chrome Extension</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>Salesforce Quick Metadata Search — Lightning Fast Developer Tools</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Navigation Header -->
+  <!-- Ambient Background Glows -->
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-2"></div>
+
+  <!-- Header -->
   <header class="header">
     <div class="logo-wrapper">
-      <div class="logo-icon"></div>
-      <span class="logo-text">SF Quick Metadata Search</span>
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9.5 3C5.36 3 2 6.36 2 10.5C2 14.64 5.36 18 9.5 18C11.28 18 12.91 17.38 14.2 16.35L19.29 21.44C19.58 21.73 20.05 21.73 20.34 21.44L21.44 20.34C21.73 20.05 21.73 19.58 21.44 19.29L16.35 14.2C17.38 12.91 18 11.28 18 10.5C18 6.36 14.64 3 9.5 3ZM9.5 5C12.54 5 15 7.46 15 10.5C15 13.54 12.54 16 9.5 16C6.46 16 4 13.54 4 10.5C4 7.46 6.46 5 9.5 5Z" fill="url(#logo-grad)"/>
+          <defs>
+            <linearGradient id="logo-grad" x1="2" y1="3" x2="21.44" y2="21.44" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#00a1e0"/>
+              <stop offset="1" stop-color="#0176d3"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <span class="logo-text">SF Quick Search</span>
     </div>
-    <a href="#features" class="nav-btn">Explore Features</a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="https://chrome.google.com/webstore" class="nav-btn">Add to Chrome</a>
+    </div>
   </header>
 
   <!-- Hero Section -->
   <section class="hero">
     <div class="hero-content">
-      <span class="badge">Boost Salesforce Productivity</span>
-      <h1>Search and Jump to Salesforce Metadata Instantly</h1>
-      <p>A lightning-fast, premium utility to query Flows, Apex Classes, Triggers, Validation Rules, Permission Sets, Custom Fields, and Labels directly from your browser toolbar.</p>
+      <div class="badge-wrapper">
+        <span class="badge">
+          <span class="badge-pulse"></span>
+          Now supporting Manifest V3
+        </span>
+      </div>
+      <h1>Accelerate Your Salesforce <span class="text-gradient">Metadata Workflows</span></h1>
+      <p>Search, inspect, and deploy Apex, Flows, Validation Rules, and Fields instantly. Assign permissions and execute scripts directly from a gorgeous browser console.</p>
       <div class="hero-actions">
-        <a href="#features" class="btn primary-btn">Explore Features</a>
+        <a href="https://chrome.google.com/webstore" class="btn primary-btn">Install on Chrome</a>
+        <a href="#features" class="btn secondary-btn">See it in action</a>
+      </div>
+    </div>
+    
+    <!-- Hero Mockup Window -->
+    <div class="hero-preview-container">
+      <div class="preview-glow"></div>
+      <div class="mockup-window">
+        <div class="window-header">
+          <div class="dots">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+          </div>
+          <div class="search-bar-mock">Search metadata...</div>
+        </div>
+        <div class="window-body">
+          <div class="mock-sidebar">
+            <div class="mock-item active">🔍 Search</div>
+            <div class="mock-item">💻 Console</div>
+            <div class="mock-item">👥 Assignments</div>
+            <div class="mock-item">🧪 Tests</div>
+          </div>
+          <div class="mock-content">
+            <div class="mock-results">
+              <div class="result-card">
+                <span class="result-type tag-flow">Flow</span>
+                <span class="result-name">Opportunity_Auto_Close_Handler</span>
+              </div>
+              <div class="result-card">
+                <span class="result-type tag-apex">ApexClass</span>
+                <span class="result-name">AccountTriggerHandler</span>
+              </div>
+              <div class="result-card">
+                <span class="result-type tag-field">CustomField</span>
+                <span class="result-name">Project__c.Status__h</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -32,36 +96,51 @@
   <!-- Features Section -->
   <section id="features" class="features">
     <div class="section-title">
-      <h2>Power Features</h2>
-      <p>Designed specifically for Salesforce Developers, Admins, and Consultants.</p>
+      <h2>Engineered for Salesforce Professionals</h2>
+      <p>Stop jumping through Salesforce setup menus. Inspect and edit everything in a unified tab interface.</p>
     </div>
     <div class="grid">
+      <!-- Card 1 -->
       <div class="card">
-        <div class="card-icon">🔍</div>
-        <h3>Omni Search</h3>
-        <p>Type to search across Apex classes, flows, fields, custom labels, and validation rules instantly using Salesforce APIs.</p>
+        <div class="card-icon-container bg-blue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </div>
+        <h3>Omni Metadata Search</h3>
+        <p>Query Salesforce components (Flows, Apex, Validation Rules, Fields, Labels) instantly using optimized tooling APIs with keyboard hotkeys.</p>
       </div>
+
+      <!-- Card 2 -->
       <div class="card">
-        <div class="card-icon">👥</div>
-        <h3>Bulk User Assignments</h3>
-        <p>Assign and revoke permission sets for multiple users concurrently in a side-by-side grid checklist.</p>
+        <div class="card-icon-container bg-green">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        </div>
+        <h3>Bulk User Allocator</h3>
+        <p>A side-by-side interactive grid checklist to select multiple users and assign or revoke permission sets instantly with live count indicators.</p>
       </div>
+
+      <!-- Card 3 -->
       <div class="card">
-        <div class="card-icon">💻</div>
-        <h3>Apex Sandbox Editor</h3>
-        <p>Write, compile, and execute anonymous Apex scripts or run unit test suites in real-time with syntax highlighting.</p>
+        <div class="card-icon-container bg-purple">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+        </div>
+        <h3>Anonymous Script Console</h3>
+        <p>Run anonymous Apex commands, configure logging levels, toggle auto-beautification for sObject prints, and export clean support logs.</p>
       </div>
+
+      <!-- Card 4 -->
       <div class="card">
-        <div class="card-icon">📂</div>
-        <h3>Explorer & Details</h3>
-        <p>Drill down into field formulas, permission properties, validation error formulas, and object details without opening separate tabs.</p>
+        <div class="card-icon-container bg-orange">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+        </div>
+        <h3>Real-time Code Sandbox</h3>
+        <p>Deploy code updates directly with built-in compilation error line parsing, split-screen preview panels, and syntax highlight rendering overlays.</p>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
   <footer class="footer">
-    <p>&copy; 2026 Quick Metadata Search for Salesforce. Available on the Chrome Web Store.</p>
+    <p>&copy; 2026 Quick Metadata Search for Salesforce. Built with 💙 for the Salesforce community.</p>
   </footer>
 </body>
 </html>
